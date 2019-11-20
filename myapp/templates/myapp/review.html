@@ -1,0 +1,35 @@
+{% extends 'myapp/base.html' %}
+
+{% load crispy_forms_tags %}
+{% block body_block %}
+    <form action="{% url 'myapp:review' %}" method="post">
+        <h3><i> Kindly provide your Feedback: </i></h3>
+        <br/>
+        {% if RatingErr %}
+            <h3 style="color:Red">{{ RatingErr }}</h3>
+        {% endif %}
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-3 mb-0">
+                {{ form.reviewer|as_crispy_field }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3 mb-0">
+                {{ form.book|as_crispy_field }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3 mb-0">
+                {{ form.rating|as_crispy_field }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4 mb-0">
+                {{ form.comments|as_crispy_field }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success"> Submit </button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{%  extends 'myapp/base.html' %}
+
+{% block body_block %}
+    <body>
+        <h3><i>Book Reviews:</i></h3>
+        <br/>
+        <ol>
+            <li class="list-group-item"><b>Title:</b> {{ book.title }}</li>
+            {% if Rating_Err %}
+               <li class="list-group-item"><b>Review:</b> {{ Rating_Err }}</li>
+            {% else %}
+                <li class="list-group-item"><b>Review:</b> {{ avg_review }}</li>
+            {% endif %}
+        </ol>
+
+{#        <a href="{% url 'myapp:index' %}">Home</a>#}
+    </body>
+{% endblock %}

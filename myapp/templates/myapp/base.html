@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+    <head>
+{#        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">#}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'myapp/style.css' %}" />
+
+
+        <nav class="navbar navbar-expand-sm bg-dark"
+        {% block nav-style %}{% endblock %}">
+            <div class="container p-none">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'myapp:index' %}"><b><i>Django Project</i></b></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li class="nav-item"><a class="nav-link" href="{% url 'myapp:index' %}"><b>Home</b></a></li>
+{#                        <li class="nav-item"><a class="nav-link" href="{% url 'myapp:register' %}"><b>Register</b></a></li>#}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'myapp:findbooks' %}"><b>Search Book</b></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'myapp:place_order' %}"><b>Order</b></a></li>
+                        <li class="nav-item ml-auto"><a class="nav-link" href="{% url 'myapp:about' %}"><b>About</b></a></li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+{#                            <li class="nav-item mr-auto ">#}
+
+                                <li class="nav-item"><i style="color:white">Welcome {{ user.username }} </i></li>
+                                <li class="nav-item"><a class='nav-link' href="{% url 'myapp:logout' %}"><b>Logout</b></a></li>
+                            {% else %}
+                            <li class="nav-item"><a class= 'nav-link' href="{% url 'myapp:login' %}"><b>Login</b></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'myapp:register' %}"><b>Register</b></a></li>
+
+
+                        </ul>
+                        {% endif %}
+
+                </div>
+            </div>
+        </nav>
+        <title>eBook APP - {% block title %}Welcome!{% endblock %}</title>
+    </head>
+
+    <body class="bodytag">
+        <div class="bodycontent">
+
+{#            <h1>{% block myhdg %}Hello {{ request.user.username|upper }} {% endblock %}</h1>#}
+            {% block body_block %}*** {% endblock %}
+        </div>
+        <hr />
+{#        <div>#}
+{#            <ul>#}
+{#                <li class="hbar1"><a href="/myapp/about">Find out about this site</a></li>#}
+{#                <li class="hbar1"><a href = "{% url 'myapp:index' %}">Click here to return to main page</a><br/></li>#}
+{#                <li class="hbar1"><a href = "{%  url 'myapp:findbooks' %}">Find books</a></li>#}
+{#                <li class="hbar1"><a href = "{%  url 'myapp:place_order' %}">Place Order</a></li>#}
+{#            </ul>#}
+{#        </div>#}
+         <!-- Footer -->
+</body>
+    <footer class="page-footer fixed bottom">
+        <div class= "navbar navbar-inverse navbar-static-bottom" role="navigation">
+            <div class="navbar-text pull-left">
+            </div>
+            <div class= "navbar-text pull-right">
+                <a href="{% url 'myapp:index' %}">
+                    <b><i>Home</i></b></a>
+            </div>
+            <div class= "navbar-text pull-right">
+                <a href="{% url 'myapp:findbooks' %}">
+                    <b><i>Search Books</i></b></a>
+            </div>
+            <div class= "navbar-text pull-right">
+                <a href="{% url 'myapp:place_order' %}">
+                    <b><i>Place Order</i></b></a>
+            </div>
+            <div class= "navbar-text pull-right">
+                <a href="{% url 'myapp:review' %}">
+                    <b><i>Give Review</i></b></a>
+            </div>
+            <div class="navbar-text pull-left">
+            &copy; UoW MAC Program, 2019
+            </div>
+        </div>
+    </footer>
+
+
+</html></html>

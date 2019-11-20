@@ -1,0 +1,42 @@
+.hbar1 {
+    display: inline;
+    margin: 15px;
+
+}
+
+.bodytag {
+    background-color: white;
+
+}
+
+.bodycontent {
+    padding-bottom: 5%;
+    padding-left: 2%;
+}
+
+/*.navbar {*/
+/*    !*background-color: #3F729B;*!*/
+/*}*/
+
+.navbar-inverse .navbar-brand{
+    color: #ddffdd;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #ddffdd;
+}
+
+.page-footer{
+    color: white;
+    background-color: #1C2331;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+}
+
+html,body{
+    overflow-x: hidden;
+}
+
+
