@@ -2,6 +2,9 @@
 
 {% block body_block %}
     <body>
+    {% if Member_err %}
+        <h3><i>{{ Member_err }}</i></h3>
+    {% else %}
         <h3><i>Book Reviews:</i></h3>
         <br/>
         <ol>
@@ -12,6 +15,7 @@
                 <li class="list-group-item"><b>Review:</b> {{ avg_review }}</li>
             {% endif %}
         </ol>
+    {%  endif %}
 
 {#        <a href="{% url 'myapp:index' %}">Home</a>#}
     </body>

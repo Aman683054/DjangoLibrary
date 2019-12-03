@@ -1,41 +1,39 @@
+import pytz
+from django.contrib import messages
 from django.contrib.auth.hashers import make_password
-from django.shortcuts import render, get_object_or_404, redirect, reverse
-from .models import Book, Review
+from django.shortcuts import render, get_object_or_404, redirect, reverse, render_to_response
+from django.template.loader import render_to_string
+from datetime import datetime
+from .models import Book, Review, Member
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import SearchForm, OrderForm, ReviewForm, RegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from random import  randint
+from django.core.files.storage import FileSystemStorage
 from django.template import RequestContext
 
 # Create your views here.
 def index(request):
-    request.session.set_test_cookie()
+    if 'last_login' in request.session:
+        last_login = request.session['last_login']
+    else:
+        last_login = "Your last login was more than one hour ago!!"
     booklist = Book.objects.all().order_by('id')[:10]
-    return render(request, 'myapp/index.html', {'booklist': booklist})
-
-# def test_cookie(request):
-#     if not request.COOKIES.get('number'):
-#         response = HttpResponse("Cookie Set")
-#         response.set_cookie('number', str(randint(1, 100)))
-#         return response
-#     else:
-#         return HttpResponse(request.COOKIES['number'])
+    return render(request, 'myapp/index.html', {'booklist': booklist, 'last_login': last_login})
 
 
 def about(request):
-    # if request.session.test_cookie_worked():
-    #     print("Cookies worked")
-    #     request.session.delete_test_cookie()
-    response = HttpResponse(render(context = None))
-    context = RequestContext(request)
 
-    if request.COOKIES['number']:
-        number = request.COOKIES['number']
+    if 'number' in request.COOKIES:
+        mynum = request.COOKIES['number']
+        fav_number = render(request, 'myapp/about.html', {'mynum': mynum})
     else:
-        number = response.set_cookie('number', randint(1, 100))
-    # value = request.COOKIES['number']
-    return render(request, 'myapp/about.html', {'value': number})
+        mynum = randint(1, 100)
+        fav_number = render(request, 'myapp/about.html', {'mynum': mynum})
+        fav_number.set_cookie('number', mynum, 30)
+    return fav_number
+    # return  render(request, 'myapp/about.html')
 
 
 def detail(request, book_id):
@@ -71,34 +69,41 @@ def findbooks(request):
         form = SearchForm()
         return render(request, 'myapp/findbooks.html', {'form': form})
 
-
+@login_required
 def place_order(request):
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            books = form.cleaned_data['books']
-            # book = order.books
-            # order = form.save(commit=False)
-            member = order.member
-            total = 0
-            for b in books:
-                total += b.price
-            # order.total_price = total
-            type = order.order_type
-            order.save()
-            form.save_m2m()
-            if type == 1:
-                for b in order.books.all():
-                    member.borrowed_books.add(b)
+    try:
+        if Member.objects.get(id=request.user.id):
+            if request.method == 'POST':
+                form = OrderForm(request.POST)
+                if form.is_valid():
+                    order = form.save(commit=False)
+                    books = form.cleaned_data['books']
+                    # book = order.books
+                    # order = form.save(commit=False)
+                    # member = order.member
+                    member = Member.objects.get(id=request.user.id)
+                    order.member = member
+                    total = 0
+                    for b in books:
+                        total += b.price
+                    # order.total_price = total
+                    type = order.order_type
+                    order.save()
+                    form.save_m2m()
+                    if type == 1:
+                        for b in order.books.all():
+                            member.borrowed_books.add(b)
 
-            return render(request, 'myapp/order_response.html', {'books': books, 'order': order, 'total': total})
-        else:
-            return render(request, 'myapp/placeorder.html', {'form': form})
+                    return render(request, 'myapp/order_response.html', {'books': books, 'order': order, 'total': total})
+                else:
+                    return render(request, 'myapp/placeorder.html', {'form': form})
 
-    else:
-        form = OrderForm()
-        return render(request, 'myapp/placeorder.html', {'form': form})
+            else:
+                form = OrderForm()
+                return render(request, 'myapp/placeorder.html', {'form': form})
+    except Member.DoesNotExist:
+        Member_err = "You are not a registered client"
+        return render(request, 'myapp/placeorder.html', {'Member_err': Member_err})
 
 
 def review(request):
@@ -126,56 +131,84 @@ def review(request):
 
 def register(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST, request.FILES)
+        valid_format = ['jpg', 'png', 'jpeg']
         if form.is_valid():
-            sign_up = form.save(commit=False)
-            sign_up.password = make_password(form.cleaned_data['password'])
-            sign_up.save()
-            return index(request)
+            print("Hi")
+            image = form.cleaned_data['avatar']
+            img = str(image).split('.')
+            # print(img)
+            if img[1] in valid_format:
+
+                sign_up = form.save(commit=False)
+                sign_up.password = make_password(form.cleaned_data['password'])
+                sign_up.save()
+
+                return index(request)
+            else:
+
+                Message_Err= "Wrong image format"
+                return render(request, 'myapp/register.html', {'form': form, 'Message_Err': Message_Err})
         else:
-            HttpResponse("Please fill all the fields correctly")
+            Message_Err = "Please fill all the fields correctly"
+            return render(request, 'myapp/register.html', {'form': form, 'Message_Err': Message_Err})
     else:
         form = RegisterForm()
         return render(request, 'myapp/register.html', {'form': form})
 
 
 def user_login(request):
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
+        current_login_time = datetime.now(pytz.timezone('America/Toronto'))
+        timestamp = current_login_time.strftime("%d-%b-%Y (%H:%M:%S)")
+        request.session['last_login'] = 'Last Login: ' + timestamp
+        request.session.set_expiry(3600)
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse('myapp:index'))
+                if 'next' in request.POST:
+                    return redirect(request.POST.get('next'))
+                else:
+                    return HttpResponseRedirect(reverse(('myapp:index')))
             else:
                 return HttpResponse('Your account is disabled.')
         else:
-            return HttpResponse('Invalid login details.')
+            # return HttpResponse('Invalid login details.')
+            Member_err = "Please enter the details correctly"
+            return render(request, 'myapp/login.html', {'Member_err': Member_err})
     else:
         return render(request, 'myapp/login.html')
 
 @login_required
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect(reverse(('myapp:index')))
+    return HttpResponseRedirect(reverse('myapp:index'))
 
-
+@login_required
 def chk_reviews(request, book_id):
-    if request.user.is_authenticated:
-        book = get_object_or_404(Book, id=book_id)
-        total = 0
-        avg_review = 0
-        ratings = Review.objects.filter(book__id=book_id)
-        if ratings:
-            for r in ratings:
-                rate = r.rating
-                total += rate
-            total_no_of_reviews = Book.objects.get(id=book_id).num_reviews
-            avg_review = total/total_no_of_reviews
-            return render(request, 'myapp/chk_reviews.html', {'book': book, 'avg_review': avg_review})
-        else:
-            Rating_err = "There are no reveiws as of now"
-            return render(request, 'myapp/chk_reviews.html', {'book': book, 'Rating_Err': Rating_err })
-    else:
-        return HttpResponse("You are not a registered Client")
+    try:
+        if Member.objects.get(id=request.user.id):
+            book = get_object_or_404(Book, id=book_id)
+            total = 0
+            avg_review = 0
+            ratings = Review.objects.filter(book__id=book_id)
+            if ratings:
+                for r in ratings:
+                    rate = r.rating
+                    total += rate
+                total_no_of_reviews = Book.objects.get(id=book_id).num_reviews
+                avg_review = total/total_no_of_reviews
+                return render(request, 'myapp/chk_reviews.html', {'book': book, 'avg_review': avg_review})
+            else:
+                Rating_err = "There are no reviews as of now"
+                return render(request, 'myapp/chk_reviews.html', {'book': book, 'Rating_Err': Rating_err })
+        # else:
+        #     return HttpResponse("You are not a registered Client")
+    except Member.DoesNotExist:
+        Member_err = "You are not a registered client"
+        return render(request, 'myapp/chk_reviews.html', {'Member_err': Member_err})
+

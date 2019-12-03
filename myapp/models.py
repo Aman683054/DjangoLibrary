@@ -2,7 +2,10 @@ from django.db import models
 import datetime
 from django.contrib.auth.models import User
 from django.utils import timezone
+from upload_validator import FileTypeValidator
+
 from .validator import maxvaluevalidator, minvaluevalidator
+from django.core.validators import FileExtensionValidator, validate_image_file_extension
 
 
 # Create your models here--------------
@@ -48,6 +51,7 @@ class Member(User):
     last_renewal = models.DateField(default=timezone.now)
     auto_renew = models.BooleanField(default=True)
     borrowed_books = models.ManyToManyField(Book, blank=True)
+    avatar = models.FileField(upload_to='profile', help_text="Accepted format are .PNG, .JPEG, .JPG", blank=True, null=True)
 
 
 
@@ -63,6 +67,9 @@ class Order(models.Model):
     # total_price = models.DecimalField(max_digits=10, decimal_places=2,  blank=True, null=True)
     def total_items(self):
         return self.books.all()
+    def total_books(self):
+        return len(self.books.all())
+
     def __str__(self):
         return str(self.id) + " " + str(self.order_date)
 

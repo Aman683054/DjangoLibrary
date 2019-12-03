@@ -19,16 +19,18 @@ class SearchForm(forms.Form):
 class RegisterForm(forms.ModelForm):
     class Meta:
         model = Member
-        fields = ['first_name', 'last_name', 'username', 'password', 'email', 'status', 'address', 'city', 'province', 'auto_renew']
+        fields = ['first_name', 'last_name', 'username', 'password', 'email', 'status', 'address', 'city', 'province', 'auto_renew', 'avatar']
         widgets = {'status': forms.RadioSelect(), 'auto_renew': forms.CheckboxInput()}
+        labels = {'avatar': u'Profile Picture'}
 
 
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['books', 'member', 'order_type']
+        fields = ['books', 'order_type']
         widgets = {'books': forms.CheckboxSelectMultiple(), 'order_type': forms.RadioSelect}
-        labels = {'member': u'Member name', }
+        # labels = {'member': u'Member name', }
+
 
 
 class ReviewForm(forms.ModelForm):

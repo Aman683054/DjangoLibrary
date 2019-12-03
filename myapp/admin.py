@@ -1,9 +1,11 @@
+import decimal
+
 from django.contrib import admin
 from django.contrib import admin
 from django.db.models import F
 from .models import Publisher, Book, Order, Member, Review
+from django.contrib import messages
 
-admin.site.register(Order)
 admin.site.register(Member)
 
 
@@ -17,11 +19,20 @@ admin.site.register(Review, ReviewAdmin)
 # Register your models here.
 
 def UpdatePriceBy10(modeladmin, request, queryset):
-    queryset.update(price = F('price') + 10)
+    for book in queryset:
+        if book.price <= 990:
+            # queryset.update(price = F('price') + 10)
+            book.price = book.price + decimal.Decimal('10')
+            book.save()
+            messages.success(request, "Successfully updated book '" + book.title + "'")
+        else:
+            messages.error(request,"Price getting more than 1000 in book '" + book.title + "'")
+    UpdatePriceBy10.short_description = "Adding 10 to price"
 
 
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'price')
+    fields = [('title', 'category', 'publisher'), ('num_pages', 'price', 'num_reviews')]
+    list_display = ('id', 'title', 'category', 'price')
     actions = [UpdatePriceBy10]
 
 
@@ -33,3 +44,10 @@ class PublisherAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Publisher, PublisherAdmin)
+
+class OrderAdmin(admin.ModelAdmin):
+    fields = [('books'),('member', 'order_type','order_date')]
+    list_display = ('id', 'member', 'order_type','order_date', 'total_books')
+
+
+admin.site.register(Order, OrderAdmin)

@@ -9,6 +9,7 @@
             <li class="list-group-item"><b>Price:</b> {{ book.price }} CAD</li>
             <li class="list-group-item"><b>Publisher:</b> {{ book.publisher }}</li>
         </ol>
+        <a href="{% url 'myapp:chk_reviews' book.id %}"><button class="btn btn-success" > Check Reviews </button></a>
 
 {#        <a href="{% url 'myapp:index' %}">Home</a>#}
     </body>
