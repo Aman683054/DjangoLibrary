@@ -2,30 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9f8a9931-f77a-4695-be59-1164caff77be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/book_detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/book_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/myorders.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_change_done.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_change_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_reset_complete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_reset_confirm.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_reset_done.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_reset_form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib/site-packages/django/contrib/admin/templates/registration/password_reset_email.html" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/django/contrib/admin/templates/registration/password_reset_email.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/placeorder.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/placeorder.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/results.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/review.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/review.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysiteF19/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysiteF19/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysiteF19/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysiteF19/urls.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -140,7 +118,7 @@
       <workItem from="1574587512086" duration="9561000" />
       <workItem from="1574701729292" duration="4280000" />
       <workItem from="1574823789018" duration="239000" />
-      <workItem from="1574963879606" duration="69286000" />
+      <workItem from="1574963879606" duration="71402000" />
     </task>
     <servers />
   </component>

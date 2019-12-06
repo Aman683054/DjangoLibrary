@@ -128,6 +128,7 @@ LOGIN_URL ='/myapp/login'
 MEDIA_URL = '/Images/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'myapp/Images')
 
+
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'myapp/sent_emails')
 
