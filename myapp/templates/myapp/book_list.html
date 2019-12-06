@@ -1,0 +1,30 @@
+
+{% extends 'myapp/base.html' %}
+
+{% block body_block %}
+{#    {%  include 'index0.html' %}#}
+    <body>
+
+    {% if object_list %}
+        <h4><i>{{ last_login }}</i></h4>
+        <h2><i>List of Books:</i></h2>
+        <br/>
+        <div class="list-group">
+        <ol>
+            {% for book  in object_list %}
+                <li class="list-group-item" ><a  href="{% url 'myapp:detail' book.id %}"> {{book.title}} </a>
+                    <span class="badge badge-secondary float-right" >{{ book.num_reviews }}</span>
+                </li>
+            {% endfor %}
+        </ol>
+        </div>
+
+    {% else %}
+        <strong>There are no available books!</strong>
+    {% endif %}
+
+
+{#<p><a href="{%  url 'myapp:about' %}">About page</a></p>#}
+
+</body>
+{% endblock %}

@@ -43,13 +43,12 @@ class ReviewForm(forms.ModelForm):
         #     (5, "Excellent")
         # ]
         model = Review
-        fields = ['reviewer', 'book', 'rating', 'comments']
-        widgets = {'reviewer': forms.EmailInput(),
+        fields = ['book', 'rating', 'comments']
+        widgets = {
                    'book': forms.RadioSelect(),
                    'rating': forms.NumberInput(),
                    'comments': forms.Textarea()
                    }
         labels = {'reviewer': u"Please enter a valid Email Id", 'rating': u"Rating"}
-
 
 

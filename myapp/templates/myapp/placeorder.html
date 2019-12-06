@@ -4,7 +4,7 @@
 
     <form action="{% url 'myapp:place_order' %}" method="post">
         {% if Member_err %}
-            <h3><i>{{ Member_err }}</i></h3>
+            <h4><i>{{ Member_err }}</i></h4>
         {% else %}
         <h3><i>Place your Order:</i></h3>
         <br/>

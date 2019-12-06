@@ -1,0 +1,47 @@
+
+{% extends 'myapp/base.html' %}
+
+{% block body_block %}
+{#    {%  include 'index0.html' %}#}
+    <body>
+
+    {% if Member_err %}
+        <h4><i>{{ Member_err }}</i></h4>
+    {% else %}
+
+        <h2><i>List of Orders:</i></h2>
+        <br/>
+        <div class="list-group">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Ordered Date</th>
+              <th scope="col">Order Type</th>
+              <th scope="col">Books Ordered</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for order  in orderlist %}
+                <tr>
+                <td>{{ order.order_date }}</td>
+                {% if order.order_type == 1 %}
+                    <td>Borrowed</td>
+                {% else %}
+                    <td>Purchased</td>
+                {% endif %}
+                <td>{{ order.total_items }}</td>
+                </tr>
+            {% endfor %}
+
+        </div>
+
+{#    {% else %}#}
+{#        <strong>There are no available orders!</strong>#}
+    {% endif %}
+
+
+{#<p><a href="{%  url 'myapp:about' %}">About page</a></p>#}
+
+</body>
+{% endblock %}

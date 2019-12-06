@@ -1,30 +1,44 @@
 import pytz
-from django.contrib import messages
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, get_object_or_404, redirect, reverse, render_to_response
-from django.template.loader import render_to_string
 from datetime import datetime
-from .models import Book, Review, Member
+from .models import Book, Review, Member, User, Order
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import SearchForm, OrderForm, ReviewForm, RegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from random import  randint
-from django.core.files.storage import FileSystemStorage
-from django.template import RequestContext
+from random import randint
+from django.views.generic import ListView, DetailView
+from django.contrib.auth.urls import views as auth_views
+
+
+# Class based view
+class IndexView(ListView):
+    model = Book
+    template_name = 'myapp/book_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        if 'last_login' in self.request.session:
+            context['last_login'] = self.request.session['last_login']
+        else:
+            context['last_login'] = "Your last login was more than one hour ago!!"
+        return context
+
 
 # Create your views here.
-def index(request):
-    if 'last_login' in request.session:
-        last_login = request.session['last_login']
-    else:
-        last_login = "Your last login was more than one hour ago!!"
-    booklist = Book.objects.all().order_by('id')[:10]
-    return render(request, 'myapp/index.html', {'booklist': booklist, 'last_login': last_login})
+# def index(request):
+#     if 'last_login' in request.session:
+#         last_login = request.session['last_login']
+#     else:
+#         last_login = "Your last login was more than one hour ago!!"
+#     booklist = Book.objects.all().order_by('id')[:10]
+#     return render(request, 'myapp/index.html', {'booklist': booklist, 'last_login': last_login})
 
 
 def about(request):
-
     if 'number' in request.COOKIES:
         mynum = request.COOKIES['number']
         fav_number = render(request, 'myapp/about.html', {'mynum': mynum})
@@ -36,9 +50,17 @@ def about(request):
     # return  render(request, 'myapp/about.html')
 
 
-def detail(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
-    return render(request, 'myapp/detail.html', {'book': book})
+class detailView(DetailView):
+    model = Book
+    template_name = 'myapp/book_detail.html'
+
+    def get_queryset(self):
+        return Book.objects.filter(id=self.kwargs['pk'])
+
+
+# def detail(request, book_id):
+#     book = get_object_or_404(Book, id=book_id)
+#     return render(request, 'myapp/detail.html', {'book': book})
 
 
 def findbooks(request):
@@ -69,6 +91,7 @@ def findbooks(request):
         form = SearchForm()
         return render(request, 'myapp/findbooks.html', {'form': form})
 
+
 @login_required
 def place_order(request):
     try:
@@ -94,7 +117,8 @@ def place_order(request):
                         for b in order.books.all():
                             member.borrowed_books.add(b)
 
-                    return render(request, 'myapp/order_response.html', {'books': books, 'order': order, 'total': total})
+                    return render(request, 'myapp/order_response.html',
+                                  {'books': books, 'order': order, 'total': total})
                 else:
                     return render(request, 'myapp/placeorder.html', {'form': form})
 
@@ -106,27 +130,35 @@ def place_order(request):
         return render(request, 'myapp/placeorder.html', {'Member_err': Member_err})
 
 
+@login_required
 def review(request):
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            rating = form.cleaned_data['rating']
-            if rating <= 5 and rating >= 1:
-                reviews = form.save(commit=False)
-                books = reviews.book
-                books.num_reviews += 1
-                books.save()
-                reviews.save()
-                return redirect('myapp:index')
-            else:
-                RatingErr = "You must enter a rating between 1 and 5!"
-                return render(request, 'myapp/review.html', {'form': form, 'RatingErr': RatingErr})
-        else:
-            return HttpResponse('Please fill the form correctly')
+    try:
+        if Member.objects.get(id=request.user.id, status__in=(1, 2)):
+            if request.method == 'POST':
+                form = ReviewForm(request.POST)
+                if form.is_valid():
+                    rating = form.cleaned_data['rating']
+                    if rating <= 5 and rating >= 1:
+                        reviews = form.save(commit=False)
+                        books = reviews.book
+                        books.num_reviews += 1
+                        member = Member.objects.get(id=request.user.id)
+                        reviews.reviewer = member.email
+                        books.save()
+                        reviews.save()
+                        return redirect('myapp:index')
+                    else:
+                        RatingErr = "You must enter a rating between 1 and 5!"
+                        return render(request, 'myapp/review.html', {'form': form, 'RatingErr': RatingErr})
+                else:
+                    return HttpResponse('Please fill the form correctly')
 
-    else:
-        form = ReviewForm()
-        return render(request, 'myapp/review.html', {'form': form})
+            else:
+                form = ReviewForm()
+                return render(request, 'myapp/review.html', {'form': form})
+    except Member.DoesNotExist:
+        Member_err = "You are not a registered client"
+        return render(request, 'myapp/review.html', {'Member_err': Member_err})
 
 
 def register(request):
@@ -147,7 +179,7 @@ def register(request):
                 return index(request)
             else:
 
-                Message_Err= "Wrong image format"
+                Message_Err = "Wrong image format"
                 return render(request, 'myapp/register.html', {'form': form, 'Message_Err': Message_Err})
         else:
             Message_Err = "Please fill all the fields correctly"
@@ -158,7 +190,6 @@ def register(request):
 
 
 def user_login(request):
-
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -183,10 +214,12 @@ def user_login(request):
     else:
         return render(request, 'myapp/login.html')
 
+
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('myapp:index'))
+
 
 @login_required
 def chk_reviews(request, book_id):
@@ -201,14 +234,70 @@ def chk_reviews(request, book_id):
                     rate = r.rating
                     total += rate
                 total_no_of_reviews = Book.objects.get(id=book_id).num_reviews
-                avg_review = total/total_no_of_reviews
+                avg_review = total / total_no_of_reviews
                 return render(request, 'myapp/chk_reviews.html', {'book': book, 'avg_review': avg_review})
             else:
                 Rating_err = "There are no reviews as of now"
-                return render(request, 'myapp/chk_reviews.html', {'book': book, 'Rating_Err': Rating_err })
+                return render(request, 'myapp/chk_reviews.html', {'book': book, 'Rating_Err': Rating_err})
         # else:
         #     return HttpResponse("You are not a registered Client")
     except Member.DoesNotExist:
         Member_err = "You are not a registered client"
         return render(request, 'myapp/chk_reviews.html', {'Member_err': Member_err})
+
+
+class MyPasswordResetView(auth_views.PasswordResetView):
+    template_name = 'myapp/password_reset_form.html'
+    # email_template_name = 'registration/password_reset_email.html'
+    # extra_email_context={'new_password': '123459876'}
+    def form_valid(self, form):
+        new_password = User.objects.make_random_password()
+        user_email = form.cleaned_data['email']
+        try:
+            if User.objects.get(email=user_email):
+                user = User.objects.get(email=user_email)
+                user.set_password(new_password)
+                user.save()
+                self.extra_email_context = {'new_password': new_password}
+                return super().form_valid(form)
+        except User.DoesNotExist:
+            message_err = "Please enter a valid email id that is registered"
+            # self.extra_email_context = {'message_err': message_err}
+            return render(self.request, 'myapp/password_reset_form.html', {'form':form, 'message_err': message_err})
+
+
+
+class MyPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'myapp/password_reset_done.html'
+
+
+class MyPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'myapp/password_reset_confirm.html'
+
+
+class MyPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = 'myapp/password_reset_complete.html'
+
+class MyChangePasswordView(auth_views.PasswordChangeView):
+    template_name = 'myapp/password_change_form.html'
+
+
+class MyChangePasswordConfirmView(auth_views.PasswordChangeDoneView):
+    template_name = 'myapp/password_change_done.html'
+
+
+@login_required
+def Myorders(request):
+    try:
+        if Member.objects.get(id=request.user.id):
+            if Order.objects.filter(member__id=request.user.id):
+                orderlist = Order.objects.filter(member__id=request.user.id)
+                return render(request, 'myapp/myorders.html', {'orderlist':orderlist})
+            else:
+                Member_err = "You have no orders to display"
+                return render(request, 'myapp/myorders.html', {'Member_err': Member_err})
+    except Member.DoesNotExist:
+        Member_err = "You are not a registered client"
+        return render(request, 'myapp/myorders.html', {'Member_err': Member_err})
+
 

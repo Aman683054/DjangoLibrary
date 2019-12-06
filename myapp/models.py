@@ -52,6 +52,11 @@ class Member(User):
     auto_renew = models.BooleanField(default=True)
     borrowed_books = models.ManyToManyField(Book, blank=True)
     avatar = models.FileField(upload_to='profile', help_text="Accepted format are .PNG, .JPEG, .JPG", blank=True, null=True)
+    def books_borrowed(self):
+        list1 = []
+        for books in self.borrowed_books.all():
+            list1.append(books.title)
+        return list1
 
 
 
@@ -66,7 +71,10 @@ class Order(models.Model):
     order_date = models.DateField(default=timezone.now)
     # total_price = models.DecimalField(max_digits=10, decimal_places=2,  blank=True, null=True)
     def total_items(self):
-        return self.books.all()
+        list1 = []
+        for book in self.books.all():
+            list1.append(book.title)
+        return list1
     def total_books(self):
         return len(self.books.all())
 

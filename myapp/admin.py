@@ -6,7 +6,11 @@ from django.db.models import F
 from .models import Publisher, Book, Order, Member, Review
 from django.contrib import messages
 
-admin.site.register(Member)
+class MemberAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'status', 'books_borrowed')
+
+
+admin.site.register(Member, MemberAdmin)
 
 
 class ReviewAdmin(admin.ModelAdmin):

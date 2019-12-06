@@ -28,7 +28,11 @@
 {#                            <li class="nav-item mr-auto ">#}
 
                                 <li class="nav-item"><i style="color:white">Welcome {{ user.first_name }} </i></li>
-                                <li class="nav-item"><img src="{{ user.member.avatar.url}}" width = "50" height = "50"></li>
+                                {% if user.member.avatar.url %}
+                                    <li class="nav-item"><img src="{{ user.member.avatar.url}}" width = "50" height = "50"></li>
+                                {% endif %}
+                        <li class="nav-item"><a class='nav-link' href="{% url 'password_change' %}"><b>Change Password</b></a></li>
+                                <li class="nav-item"><a class='nav-link' href="{% url 'myapp:myorders' %}"><b>MyOrders</b></a></li>
                                 <li class="nav-item"><a class='nav-link' href="{% url 'myapp:logout' %}"><b>Logout</b></a></li>
                     {% else %}
                             <li class="nav-item"><a class= 'nav-link' href="{% url 'myapp:login' %}"><b>Login</b></a></li>

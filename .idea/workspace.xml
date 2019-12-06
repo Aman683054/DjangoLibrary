@@ -2,34 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9f8a9931-f77a-4695-be59-1164caff77be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0015_auto_20191125_1221.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0016_auto_20191125_1223.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0017_auto_20191125_1227.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0018_member_avatar.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0019_auto_20191130_2300.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0020_auto_20191201_0003.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0021_auto_20191201_0230.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0022_auto_20191201_0301.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myapp/migrations/0023_auto_20191201_0312.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/book_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/book_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/myorders.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_change_done.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_change_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_reset_complete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_reset_confirm.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_reset_done.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myapp/templates/myapp/password_reset_form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib/site-packages/django/contrib/admin/templates/registration/password_reset_email.html" beforeDir="false" afterPath="$PROJECT_DIR$/Lib/site-packages/django/contrib/admin/templates/registration/password_reset_email.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/about.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/chk_reviews.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/chk_reviews.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/placeorder.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/placeorder.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/register.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/results.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/results.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/templates/myapp/review.html" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/templates/myapp/review.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/validator.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/validator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysiteF19/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysiteF19/apps.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysiteF19/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysiteF19/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mysiteF19/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysiteF19/urls.py" afterDir="false" />
     </list>
@@ -146,7 +140,7 @@
       <workItem from="1574587512086" duration="9561000" />
       <workItem from="1574701729292" duration="4280000" />
       <workItem from="1574823789018" duration="239000" />
-      <workItem from="1574963879606" duration="35046000" />
+      <workItem from="1574963879606" duration="69286000" />
     </task>
     <servers />
   </component>

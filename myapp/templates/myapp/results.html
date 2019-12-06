@@ -1,12 +1,13 @@
 {% extends 'myapp/base.html' %}
 
 <body>
-    <div>
+
+    {% block body_block %}
+        <div>
         <h1>
           {% block myhdg %} Hello {{ name }}{% endblock %}
         </h1>
     </div>
-    {% block body_block %}
         {%  if category %}
             <h2>Category: {{ category }}</h2>
         {%  endif %}
